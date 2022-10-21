@@ -54,6 +54,7 @@
             let card = createCard();
             listCard.append(card.elementsList);
             countCards++;
+
             if (countCards % 4 === 0) {
                 document.body.append(listCard);
                 listCard = createListCards();
@@ -127,6 +128,7 @@
     function createRestartButton() {
         let divElement = document.createElement('div');
         let button = document.createElement('button');
+
         button.textContent = "Сыграть ещё раз!";
         divElement.classList.add('positionButton');
         button.classList.add('btn', 'btn-primary', 'restartButton');
@@ -140,7 +142,6 @@
     function createMainHeader() {
         let header = document.createElement('h1');
         header.textContent = "Игра карточная";
-        header.classList.add();
         return header;
     }
 })();
