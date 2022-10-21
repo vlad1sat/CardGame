@@ -40,9 +40,9 @@
         restartButton.button.addEventListener('click', () => {
             location.reload();
         })
-
     }
-    createGame();
+
+    document.addEventListener('DOMContentLoaded', () => createGame());
 
     function logicCard(indexesCard, cards) {
         let countClick = 0;
@@ -101,16 +101,6 @@
                 clickTap.secondClick = null;
             }
         }
-
-        /*function sleep(milliseconds) {
-            const date = Date.now();
-            let currentDate = null;
-            do {
-                currentDate = Date.now();
-            } while (currentDate - date < milliseconds);
-        }*/
-
-
     }
 
     function createIndexCard() {
@@ -138,7 +128,6 @@
         let divElement = document.createElement('div');
         let button = document.createElement('button');
         button.textContent = "Сыграть ещё раз!";
-        //button.disabled = true;
         divElement.classList.add('positionButton');
         button.classList.add('btn', 'btn-primary', 'restartButton');
         divElement.append(button);
