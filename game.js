@@ -1,8 +1,8 @@
 (() => {
     function createCard() {
-        let elementsList = document.createElement('li');
-        let clickElement = document.createElement('button');
-        let textButton = document.createElement('p');
+        const elementsList = document.createElement('li');
+        const clickElement = document.createElement('button');
+        const textButton = document.createElement('p');
         let index = 0;
 
         textButton.textContent = "?";
@@ -21,16 +21,16 @@
     }
 
     function createListCards() {
-        let listCards = document.createElement('ul');
+        const listCards = document.createElement('ul');
         listCards.id = "menu";
         return listCards;
     }
 
     function createGame() {
-        let cards = [];
-        let restartButton = createRestartButton();
-        let nameGame = createMainHeader();
-        let indexesCard = createIndexCard();
+        const cards = [];
+        const restartButton = createRestartButton();
+        const nameGame = createMainHeader();
+        const indexesCard = createIndexCard();
 
         document.body.append(nameGame);
         logicCard(indexesCard, cards);
@@ -51,7 +51,7 @@
         let countCards = 0;
         let clickCards = { firstClick: null, secondClick: null }
         for (let index = 0; index < 16; index++) {
-            let card = createCard();
+            const card = createCard();
             listCard.append(card.elementsList);
             countCards++;
 
@@ -105,7 +105,7 @@
     }
 
     function createIndexCard() {
-        let indexes = []
+        const indexes = []
         for (let indexCard = 0; indexCard < 8; indexCard++){
             indexes.push(indexCard);
             indexes.push(indexCard);
@@ -126,13 +126,14 @@
     }
 
     function createRestartButton() {
-        let divElement = document.createElement('div');
-        let button = document.createElement('button');
+        const divElement = document.createElement('div');
+        const button = document.createElement('button');
 
         button.textContent = "Сыграть ещё раз!";
         divElement.classList.add('positionButton');
         button.classList.add('btn', 'btn-primary', 'restartButton');
         divElement.append(button);
+
         return {
             divElement,
             button
@@ -140,7 +141,7 @@
     }
 
     function createMainHeader() {
-        let header = document.createElement('h1');
+        const header = document.createElement('h1');
         header.textContent = "Игра карточная";
         return header;
     }
