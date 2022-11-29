@@ -12,7 +12,7 @@ ul {text-align: center;}
     border: 1px solid #ffffff;
 }
 
-.positionButton {
+.position-button-again {
     padding-top: 20px;
     margin-left: 2.5%;
     text-align: center;
@@ -26,7 +26,7 @@ ul {text-align: center;}
     font-family: 'Noto Sans', sans-serif;
 }
 
-.textCard {
+.text-card {
     font-family: 'Noto Sans', sans-serif;
     font-size: 20px;
     color: #ffffff;

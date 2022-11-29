@@ -7,7 +7,7 @@
         let index = 0;
 
         textButton.textContent = "?";
-        textButton.classList.add('textCard')
+        textButton.classList.add('text-card');
         clickElement.classList.add('styleCard');
 
         elementsList.append(clickElement);
@@ -189,7 +189,7 @@
         const button = document.createElement('button');
 
         button.textContent = "Сыграть ещё раз!";
-        divElement.classList.add('positionButton');
+        divElement.classList.add('position-button-again');
         button.classList.add('btn', 'btn-primary', 'restartButton');
         divElement.append(button);
 
