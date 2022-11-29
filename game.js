@@ -22,6 +22,28 @@
         }
     }
 
+    function createForm() {
+        const form = document.createElement('form');
+        const input = document.createElement('input');
+        const button = document.createElement('button');
+
+        form.classList.add('input-group', 'mb-3');
+        input.classList.add('form-control');
+        button.classList.add('btn', 'btn-primary');
+
+        button.textContent = 'Отправить';
+        input.placeholder = 'Количество карточек по вертикали/горизонтали';
+        input.type = 'number';
+
+        form.append(input, button);
+        return {
+            form,
+            input,
+            button
+        }
+    }
+
+
     function createListCards() {
         const listCards = document.createElement('ul');
         listCards.id = "menu";
@@ -30,14 +52,26 @@
 
     function createGame() {
         const cards = [];
+        const formCountCards = createForm();
         const restartButton = createRestartButton();
         const nameGame = createMainHeader();
-        const indexesCard = createIndexCard();
 
-        document.body.append(nameGame);
-        logicCard(indexesCard, cards);
+        document.body.append(nameGame, formCountCards.form);
+        logicCard(cards, 4);
 
         document.body.append(restartButton.divElement);
+        
+        formCountCards.form.addEventListener('submit', evt => {
+            evt.preventDefault();
+            const countCards = +formCountCards.input.value;
+            if (countCards % 2 !== 0 || countCards < 2 && countCards > 10 ) {
+                alert('Некорректное введенное значение клеток!');
+            }
+            else {
+                const oldCardList = document.querySelector('#list-div');
+                oldCardList.replaceWith(logicCard(cards, countCards));
+            }
+        })
 
         restartButton.button.addEventListener('click', () => {
             location.reload();
@@ -46,86 +80,92 @@
 
     document.addEventListener('DOMContentLoaded', () => createGame());
 
-    function logicCard(indexesCard, cards) {
+    function logicCard(cards, countUserCards) {
         let countClick = 0;
         let countVictory = 0;
         let listCard  = createListCards();
         let countCards = 0;
-        let clickCards = { firstClick: null, secondClick: null }
-        for (let index = 0; index < 16; index++) {
+        const clickCards = { firstClick: null, secondClick: null };
+        const indexesCard = createIndexCard(countUserCards);
+        const divList = document.createElement('div');
+        divList.id = 'list-div';
+        divList.appendChild(listCard);
+
+        for (let index = 0; index < countUserCards ** 2; index++) {
             const card = createCard();
             listCard.append(card.elementsList);
             countCards++;
 
-            if (countCards % 4 === 0) {
-                document.body.append(listCard);
+            if (countCards % countUserCards === 0) {
                 listCard = createListCards();
+                divList.appendChild(listCard);
             }
 
             card.index = indexesCard[index];
             cards.push(card);
 
-            card.clickElement.addEventListener('click', async () => {
+            card.clickElement.addEventListener('click', () => {
                 card.textButton.textContent = String(card.index);
                 card.clickElement.disabled = true;
 
-                if (countClick === 0)
-                    clickCards.firstClick = card;
-                else
-                    clickCards.secondClick = card;
+                if (countClick === 0) clickCards.firstClick = card;
+                else clickCards.secondClick = card;
 
                 countClick++;
 
                 changeStateCards(true);
                 waitAnswer();
-            });
 
-           function waitAnswer() {
-                setTimeout(() => {
-                    if (countClick === 2) {
-                        countClick = 0;
-                        if (clickCards.firstClick.index !== clickCards.secondClick.index) {
-                            cleanCard(clickCards.firstClick);
-                            cleanCard(clickCards.secondClick);
+                function waitAnswer() {
+                    setTimeout(() => {
+                        if (countClick === 2) {
+                            countClick = 0;
+                            if (clickCards.firstClick.index !== clickCards.secondClick.index) {
+                                cleanCard(clickCards.firstClick);
+                                cleanCard(clickCards.secondClick);
+                            }
+                            else {
+                                clickCards.firstClick.isSolve = true;
+                                clickCards.secondClick.isSolve = true;
+                                countVictory++;
+                            }
+                            cleanClickTap(clickCards);
                         }
-                        else {
-                            clickCards.firstClick.isSolve = true;
-                            clickCards.secondClick.isSolve = true;
-                            countVictory++;
+
+                        if (countVictory === countUserCards) {
+                            alert("Поздравляем! Вы выиграли!");
+                            location.reload();
                         }
-                        cleanClickTap(clickCards);
-                    }
 
-                    if (countVictory === 8) {
-                        alert("Поздравляем! Вы выиграли!");
-                        location.reload();
-                    }
-
-                    changeStateCards(false);
-                }, 1000);
-            }
-
-             function  changeStateCards(state) {
-                for (let bLockCard of cards) {
-                    if (!bLockCard.isSolve) bLockCard.clickElement.disabled = state;
+                        changeStateCards(false);
+                    }, 1000);
                 }
-            }
 
-            function cleanCard(card) {
-                card.textButton.textContent = "?";
-                card.clickElement.disabled = false;
-            }
+                function changeStateCards(state) {
+                    for (let bLockCard of cards) {
+                        if (!bLockCard.isSolve) bLockCard.clickElement.disabled = state;
+                    }
+                }
 
-            function cleanClickTap(clickTap) {
-                clickTap.firstClick = null;
-                clickTap.secondClick = null;
-            }
+                function cleanCard(card) {
+                    card.textButton.textContent = "?";
+                    card.clickElement.disabled = false;
+                }
+
+                function cleanClickTap(clickTap) {
+                    clickTap.firstClick = null;
+                    clickTap.secondClick = null;
+                }
+            });
         }
+
+        document.body.append(divList);
+        return divList;
     }
 
-    function createIndexCard() {
+    function createIndexCard(countCards) {
         const indexes = []
-        for (let indexCard = 0; indexCard < 8; indexCard++){
+        for (let indexCard = 0; indexCard < countCards ** 2 / 2; indexCard++) {
             indexes.push(indexCard);
             indexes.push(indexCard);
         }
@@ -162,6 +202,7 @@
     function createMainHeader() {
         const header = document.createElement('h1');
         header.textContent = "Игра карточная";
+        header.classList.add('main-header');
         return header;
     }
 })();

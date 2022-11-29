@@ -14,10 +14,11 @@ ul {text-align: center;}
 
 .positionButton {
     padding-top: 20px;
+    margin-left: 2.5%;
     text-align: center;
 }
 
-h1 {
+.main-header {
     color: #505aff;
     text-align: center;
     padding-top: 20px;
