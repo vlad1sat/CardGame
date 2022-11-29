@@ -3,6 +3,7 @@
         const elementsList = document.createElement('li');
         const clickElement = document.createElement('button');
         const textButton = document.createElement('p');
+        let isSolve = false;
         let index = 0;
 
         textButton.textContent = "?";
@@ -16,7 +17,8 @@
             elementsList,
             clickElement,
             textButton,
-            index
+            index,
+            isSolve
         }
     }
 
@@ -63,7 +65,7 @@
             card.index = indexesCard[index];
             cards.push(card);
 
-            card.clickElement.addEventListener('click', () => {
+            card.clickElement.addEventListener('click', async () => {
                 card.textButton.textContent = String(card.index);
                 card.clickElement.disabled = true;
 
@@ -74,23 +76,40 @@
 
                 countClick++;
 
-                setTimeout(function () {
+                changeStateCards(true);
+                waitAnswer();
+            });
+
+           function waitAnswer() {
+                setTimeout(() => {
                     if (countClick === 2) {
                         countClick = 0;
                         if (clickCards.firstClick.index !== clickCards.secondClick.index) {
                             cleanCard(clickCards.firstClick);
                             cleanCard(clickCards.secondClick);
                         }
-                        else
+                        else {
+                            clickCards.firstClick.isSolve = true;
+                            clickCards.secondClick.isSolve = true;
                             countVictory++;
+                        }
                         cleanClickTap(clickCards);
                     }
 
                     if (countVictory === 8) {
                         alert("Поздравляем! Вы выиграли!");
+                        location.reload();
                     }
-                }, 1000)
-            })
+
+                    changeStateCards(false);
+                }, 1000);
+            }
+
+             function  changeStateCards(state) {
+                for (let bLockCard of cards) {
+                    if (!bLockCard.isSolve) bLockCard.clickElement.disabled = state;
+                }
+            }
 
             function cleanCard(card) {
                 card.textButton.textContent = "?";
