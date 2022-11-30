@@ -63,7 +63,7 @@ function createGame() {
     formCountCards.form.addEventListener('submit', evt => {
         evt.preventDefault();
         const countCards = +formCountCards.input.value;
-        if (countCards % 2 !== 0 || countCards < 2 && countCards > 10) alert('Некорректное введенное значение клеток!');
+        if (countCards % 2 !== 0 || countCards < 2 || countCards > 10) alert('Некорректное введенное значение клеток!');
         else {
             const oldCardList = document.querySelector('#list-div');
             oldCardList.replaceWith(logicCard(cards, countCards));
